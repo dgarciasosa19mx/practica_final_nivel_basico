@@ -6,9 +6,8 @@ class Empleado:
         self.meta_cumplida = meta_cumplida == "True"
         self.salario_base = float(salario_base)
         self.salario_final = float(salario_base)
-
-    # se trae metodo de archivo [procesador.py]
-    def calcular_bonos(lista_empleados):
+    
+    def calcular_neto(lista_empleados):
         for emp in lista_empleados:
             # se cambio de ubicacion la variable tiene_derecho_a_bono, se coloca dentro del 
             # bucle for para que iteractue en el ciclo y se reinicie a False cada que cambie 
@@ -21,5 +20,4 @@ class Empleado:
                 emp.salario_final = emp.salario_base + 500
             else:
                 emp.salario_final = emp.salario_base
-                
         return lista_empleados

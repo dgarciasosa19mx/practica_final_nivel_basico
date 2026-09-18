@@ -33,20 +33,32 @@ def generar_reporte(lista_empleados, ruta_salida):
         bError = False
     finally:
         if bError == False:
-            print("Proceso completado. Revisa 'reporte_final.csv' para ver los errores. >.<")
+            print("Proceso completado. Revisa 'reporte_final.csv' >.<")
 
 if __name__ == "__main__":
     # se crea archivo CSV para testing
-    with open('empleados.csv', 'w', encoding='utf-8') as f:
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    file_csv = os.path.join(base_dir, 'empleados.csv')
+    with open(file_csv, 'w', encoding='utf-8') as f:
         f.write("nombre,departamento,antiguedad,meta_cumplida,salario_base\n")
         f.write("Ana,Ventas,6,False,3000\n")      
         f.write("Luis,Soporte,2,True,2500\n")     
         f.write("Carlos,Soporte,1,False,2000\n")  
-        f.write("Marta,Ventas,2,False,3000\n")    
+        f.write("Marta,Ventas,2,False,3000\n")
+        f.write("Daniel,TI,2,False,3000\n")
 
     # inicio ejecucion
-    empleados = LectorCSV.cargar_empleados('empleados.csv')
-    empleados_procesados = Empleado.calcular_bonos(empleados)
-    generar_reporte(empleados_procesados, 'reporte_final.csv')
-    # se traslado el pront de Proceso completado al metodo generar_reporte()
-    # print("Proceso completado. Revisa 'reporte_final.csv' para ver los errores. >.<")
+    lector = LectorCSV("empleados.csv")
+    empleados = lector.cargar_empleados()
+    try:
+        if os.path.exists(file_csv) and os.path.isfile(file_csv):
+            empleados_procesados = Empleado.calcular_neto(empleados)
+            generar_reporte(empleados_procesados, 'reporte_final.csv')
+            # se traslado el pront de Proceso completado al metodo generar_reporte()
+            # print("Proceso completado. Revisa 'reporte_final.csv' para ver los errores. >.<")
+        else:
+            print("Proceso completado. No se encontro archivo 'empleados.csv' para generar 'reporte_final.csv'.")
+    except FileNotFoundError:
+        print(f"The file at {file_csv} does not exist.")
+    except Exception as e:
+        print(f"An error occurred: {e}")
